@@ -5,7 +5,7 @@ import (
 	"os"
 	"encoding/json"
 	"strings"
-	"github.com/parsemd/parsemd"
+	"github.com/parsemd/parsemdpkg"
 	"github.com/parsemd/fs"
 )
 
@@ -17,10 +17,10 @@ type PostInfo struct {
 
 type PostItemForVue struct {
 	Post PostInfo `json:"post"`;
-	Header parsemd.MarkDownHeader `json:"header"`;
+	Header parsemdpkg.MarkDownHeader `json:"header"`;
 }
 
-func findAPreviewContent(parsedMarkDownData parsemd.ParsedMarkDownData) (previewContent string) {
+func findAPreviewContent(parsedMarkDownData parsemdpkg.ParsedMarkDownData) (previewContent string) {
 	if parsedMarkDownData.Prologue != "" {
 		return parsedMarkDownData.Prologue;
 	}
@@ -68,7 +68,7 @@ func main() {
 
 	for _, fileName := range fileList {
 		fmt.Println(fileName);
-		parsedMarkDownData := parsemd.MarkdownFile2ParsedMarkDownData(postDir + "/" + fileName)
+		parsedMarkDownData := parsemdpkg.MarkdownFile2ParsedMarkDownData(postDir + "/" + fileName)
 		jsonData, err := json.Marshal(parsedMarkDownData)
 		if err != nil {
 			fmt.Printf("could not marshal json: %s\n", err)
