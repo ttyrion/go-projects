@@ -1,0 +1,14 @@
+[
+    {
+        "post": {
+            "fileName": "2018-04-07-1-齐次坐标.json",
+            "previewContent": "\u003e齐次坐标表示是计算机图形学的重要手段之一，它既能够用来明确区分向量和点，同时也更易用于进行仿射（线性）几何变换。”—— F.S. Hill, JR"
+        },
+        "header": {
+            "title": "齐次坐标",
+            "date": "2018-04-07",
+            "author": "翼",
+            "headerImage": "image/bg.jpg"
+        }
+    }
+]
