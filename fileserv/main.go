@@ -26,8 +26,8 @@ func NewCORSMiddleware(handlerToWrap http.Handler) *CORSMiddleware {
 }
 
 func main() {
-    fileHandler := http.StripPrefix("/images/", http.FileServer(http.Dir("./static/")));
-    http.Handle("/images/", NewCORSMiddleware(fileHandler))
+    fileHandler := http.StripPrefix("/fs/", http.FileServer(http.Dir("./static/")));
+    http.Handle("/fs/", NewCORSMiddleware(fileHandler))
     err := http.ListenAndServe(":8001", nil)
     fmt.Println(err)
 }
