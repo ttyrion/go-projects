@@ -13,8 +13,8 @@ type CORSMiddleware struct {
 func (middleware *CORSMiddleware) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     start := time.Now();
 
-	  // CORS
-	  w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173");
+	// CORS
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173");
 
     middleware.handler.ServeHTTP(w, r);
 
@@ -26,9 +26,8 @@ func NewCORSMiddleware(handlerToWrap http.Handler) *CORSMiddleware {
 }
 
 func main() {
-    fileHandler := http.FileServer(http.Dir("./static/"));
-
-    http.Handle("/", NewCORSMiddleware(fileHandler))
+    fileHandler := http.StripPrefix("/images/", http.FileServer(http.Dir("./static/")));
+    http.Handle("/images/", NewCORSMiddleware(fileHandler))
     err := http.ListenAndServe(":8001", nil)
     fmt.Println(err)
 }
