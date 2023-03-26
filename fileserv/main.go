@@ -2,32 +2,58 @@ package main
 
 import (
   "fmt"
-  "time"
   "net/http"
 )
 
 type CORSMiddleware struct {
-    handler http.Handler
+    handler http.Handler;
+    allowedOrigins []string;
+}
+
+func NewCORSMiddleware(handlerToWrap http.Handler, origins []string) *CORSMiddleware {
+    return &CORSMiddleware{handlerToWrap, origins};
+}
+
+func (middleware *CORSMiddleware) IsAllowedOriginsSet() bool {
+    return len(middleware.allowedOrigins) > 0;
+}
+
+func (middleware *CORSMiddleware) isAllowedOriginsMatched(origin string) bool {
+    if middleware.IsAllowedOriginsSet() {
+        for _, o := range middleware.allowedOrigins {
+            if o == origin {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 func (middleware *CORSMiddleware) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-    start := time.Now();
-
 	// CORS
-	w.Header().Set("Access-Control-Allow-Origin", "http://106.14.155.231:80,http://localhost:5173");
+    if len(r.Header["Origin"]) > 0 {
+        requestOrigin := r.Header["Origin"][0];
+        // origin matched
+        if middleware.isAllowedOriginsMatched(requestOrigin) {
+	        w.Header().Set("Access-Control-Allow-Origin", requestOrigin);
+        }
+    }
 
     middleware.handler.ServeHTTP(w, r);
-
-    fmt.Println("%s %s %v", r.Method, r.URL.Path, time.Since(start));
 }
 
-func NewCORSMiddleware(handlerToWrap http.Handler) *CORSMiddleware {
-    return &CORSMiddleware{handlerToWrap}
-}
 
 func main() {
     fileHandler := http.StripPrefix("/fs/", http.FileServer(http.Dir("./static/")));
-    http.Handle("/fs/", NewCORSMiddleware(fileHandler))
+
+    allowedOrigins := []string{
+        "http://www.huicentury.tech",
+        "http://106.14.155.231",
+        "http://localhost:5173",
+    }
+    http.Handle("/fs/", NewCORSMiddleware(fileHandler, allowedOrigins))
+
     err := http.ListenAndServe(":8001", nil)
     fmt.Println(err)
 }
