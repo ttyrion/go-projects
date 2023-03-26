@@ -14,7 +14,7 @@ func (middleware *CORSMiddleware) ServeHTTP(w http.ResponseWriter, r *http.Reque
     start := time.Now();
 
 	// CORS
-	w.Header().Set("Access-Control-Allow-Origin", "http://106.14.155.231,http://localhost:5173");
+	w.Header().Set("Access-Control-Allow-Origin", "http://106.14.155.231:80,http://localhost:5173");
 
     middleware.handler.ServeHTTP(w, r);
 
