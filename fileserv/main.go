@@ -51,6 +51,7 @@ func main() {
         "http://www.huicentury.tech",
         "http://106.14.155.231",
         "http://localhost:5173",
+        "http://192.168.1.9:3000",
     }
     http.Handle("/fs/", NewCORSMiddleware(fileHandler, allowedOrigins))
 
